@@ -1,114 +1,132 @@
 /**
- * Relay — Feedback Form
- * Handles: field validation, Formspree submission,
- *          loading state, success reveal, double-submit guard.
+ * Relay — main.js
+ * Handles: textarea auto-grow, validation (Q1–Q4),
+ *          Formspree POST, redirect to success.html.
  */
 (function () {
   'use strict';
 
-  const form         = document.getElementById('relay-form');
-  const submitBtn    = document.getElementById('submit-btn');
-  const successPanel = document.getElementById('success-panel');
+  const form      = document.getElementById('relay-form');
+  const submitBtn = document.getElementById('submit-btn');
 
-  // Field config: textarea id → error element id
-  const fields = [
-    { inputId: 'q1_problem', errId: 'err-q1', fieldId: 'field-q1' },
-    { inputId: 'q2_features', errId: 'err-q2', fieldId: 'field-q2' },
-    { inputId: 'q3_switch',   errId: 'err-q3', fieldId: 'field-q3' },
+  if (!form) return;
+
+  /* ── Config ───────────────────────────────────────────────── */
+  const FORMSPREE = 'https://formspree.io/f/xaqagppb';
+  const SUCCESS   = 'success.html';
+
+  const TEXT_FIELDS = [
+    { id: 'q1_problem', errId: 'err-q1', groupId: 'fg-q1' },
+    { id: 'q2_features', errId: 'err-q2', groupId: 'fg-q2' },
+    { id: 'q3_switch',   errId: 'err-q3', groupId: 'fg-q3' },
   ];
 
-  let submitting = false;
+  const RATING_GROUP = { name: 'q4_interest', errId: 'err-q4', groupId: 'fg-q4' };
 
-  /* ── Auto-grow textareas ─────────────────────────────────── */
-  fields.forEach(({ inputId }) => {
-    const el = document.getElementById(inputId);
+  let busy = false;
+
+  /* ── Auto-grow textareas ──────────────────────────────────── */
+  TEXT_FIELDS.forEach(({ id }) => {
+    const el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', function () {
       this.style.height = 'auto';
-      this.style.height = Math.max(120, this.scrollHeight) + 'px';
+      this.style.height = Math.max(108, this.scrollHeight) + 'px';
     });
   });
 
-  /* ── Clear error on input ────────────────────────────────── */
-  fields.forEach(({ inputId, errId, fieldId }) => {
-    const el    = document.getElementById(inputId);
-    const err   = document.getElementById(errId);
-    const block = document.getElementById(fieldId);
+  /* ── Live error clearing ──────────────────────────────────── */
+  TEXT_FIELDS.forEach(({ id, errId, groupId }) => {
+    const el = document.getElementById(id);
     if (!el) return;
-
-    el.addEventListener('input', function () {
-      if (this.value.trim()) {
-        clearError(block, err);
-      }
+    el.addEventListener('input', () => {
+      if (el.value.trim()) clearErr(groupId, errId);
     });
   });
 
-  /* ── Validation ──────────────────────────────────────────── */
+  // Clear rating error on any selection
+  form.querySelectorAll(`input[name="${RATING_GROUP.name}"]`).forEach(radio => {
+    radio.addEventListener('change', () => {
+      clearErr(RATING_GROUP.groupId, RATING_GROUP.errId);
+    });
+  });
+
+  /* ── Validation ───────────────────────────────────────────── */
   function validate() {
     let ok = true;
-    let firstInvalid = null;
+    let first = null;
 
-    fields.forEach(({ inputId, errId, fieldId }) => {
-      const el    = document.getElementById(inputId);
-      const err   = document.getElementById(errId);
-      const block = document.getElementById(fieldId);
-      if (!el) return;
-
-      // Clear first, then re-evaluate
-      clearError(block, err);
-
-      if (!el.value.trim()) {
-        showError(block, err, 'This field is required — every answer helps.');
+    TEXT_FIELDS.forEach(({ id, errId, groupId }) => {
+      const el = document.getElementById(id);
+      clearErr(groupId, errId);
+      if (!el || !el.value.trim()) {
+        showErr(groupId, errId, 'This field is required.');
         ok = false;
-        if (!firstInvalid) firstInvalid = el;
+        if (!first) first = el;
       }
     });
 
-    if (firstInvalid) {
-      // Scroll to first invalid field with a bit of offset
-      const top = firstInvalid.getBoundingClientRect().top + window.scrollY - 100;
+    // Rating
+    const chosen = form.querySelector(`input[name="${RATING_GROUP.name}"]:checked`);
+    clearErr(RATING_GROUP.groupId, RATING_GROUP.errId);
+    if (!chosen) {
+      showErr(RATING_GROUP.groupId, RATING_GROUP.errId, 'Please select a rating.');
+      ok = false;
+      if (!first) {
+        first = form.querySelector(`input[name="${RATING_GROUP.name}"]`);
+      }
+    }
+
+    if (first) {
+      const top = first.getBoundingClientRect().top + window.scrollY - 96;
       window.scrollTo({ top, behavior: 'smooth' });
-      setTimeout(() => firstInvalid.focus(), 300);
+      setTimeout(() => first.focus?.(), 250);
     }
 
     return ok;
   }
 
-  function showError(block, errEl, message) {
-    if (block)  block.classList.add('is-invalid');
-    if (errEl)  { errEl.textContent = message; errEl.classList.add('visible'); }
+  /* ── Error helpers ────────────────────────────────────────── */
+  function showErr(groupId, errId, msg) {
+    const g = document.getElementById(groupId);
+    const e = document.getElementById(errId);
+    if (g) g.classList.add('has-err');
+    if (e) { e.textContent = msg; e.classList.add('show'); }
   }
 
-  function clearError(block, errEl) {
-    if (block)  block.classList.remove('is-invalid');
-    if (errEl)  { errEl.textContent = ''; errEl.classList.remove('visible'); }
+  function clearErr(groupId, errId) {
+    const g = document.getElementById(groupId);
+    const e = document.getElementById(errId);
+    if (g) g.classList.remove('has-err');
+    if (e) { e.textContent = ''; e.classList.remove('show'); }
   }
 
-  /* ── Loading state ───────────────────────────────────────── */
+  /* ── Loading state ────────────────────────────────────────── */
   function setLoading(state) {
-    submitting = state;
+    busy = state;
     submitBtn.disabled = state;
     submitBtn.classList.toggle('is-loading', state);
-    submitBtn.setAttribute('aria-busy', state ? 'true' : 'false');
+    submitBtn.setAttribute('aria-busy', String(state));
   }
 
-  /* ── Submit ──────────────────────────────────────────────── */
+  /* ── Submit ───────────────────────────────────────────────── */
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    if (submitting) return;
+    if (busy) return;
     if (!validate()) return;
 
     setLoading(true);
 
     try {
-      const res = await fetch(form.action, {
+      const res = await fetch(FORMSPREE, {
         method: 'POST',
         body: new FormData(form),
         headers: { Accept: 'application/json' },
       });
 
       if (res.ok) {
-        revealSuccess();
+        // Redirect to separate success screen
+        window.location.href = SUCCESS;
       } else {
         const data = await res.json().catch(() => ({}));
         const msg  = data?.errors?.[0]?.message || 'Something went wrong — please try again.';
@@ -121,52 +139,28 @@
     }
   });
 
-  /* ── Success reveal ──────────────────────────────────────── */
-  function revealSuccess() {
-    // Fade out form
-    form.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    form.style.opacity    = '0';
-    form.style.transform  = 'translateY(-8px)';
-    form.style.pointerEvents = 'none';
-
-    setTimeout(() => {
-      form.hidden = true;
-      successPanel.hidden = false;
-      successPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 300);
-
-    form.reset();
-    // Reset auto-grown textareas
-    fields.forEach(({ inputId }) => {
-      const el = document.getElementById(inputId);
-      if (el) el.style.height = '';
-    });
-  }
-
-  /* ── Inline global error (below button) ─────────────────── */
+  /* ── Inline global error (below button) ──────────────────── */
   function showGlobalError(msg) {
-    // Remove any existing
-    const old = document.querySelector('.global-error');
-    if (old) old.remove();
+    document.querySelector('.global-err')?.remove();
 
     const p = document.createElement('p');
-    p.className = 'global-error';
+    p.className = 'global-err';
     p.textContent = msg;
-    p.style.cssText = [
-      'font-size:13px',
-      'color:#ff453a',
-      'text-align:center',
-      'margin-top:4px',
-      'opacity:0',
-      'transition:opacity 200ms ease',
-    ].join(';');
+    Object.assign(p.style, {
+      fontSize:   '13px',
+      color:      '#ff453a',
+      textAlign:  'center',
+      marginTop:  '4px',
+      opacity:    '0',
+      transition: 'opacity 180ms ease',
+    });
 
     submitBtn.insertAdjacentElement('afterend', p);
-    requestAnimationFrame(() => requestAnimationFrame(() => { p.style.opacity = '1'; }));
+    requestAnimationFrame(() => requestAnimationFrame(() => p.style.opacity = '1'));
 
     setTimeout(() => {
       p.style.opacity = '0';
-      setTimeout(() => p.remove(), 250);
+      setTimeout(() => p.remove(), 220);
     }, 6000);
   }
 

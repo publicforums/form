@@ -1,448 +1,519 @@
-/* ================================================================
-   RELAY — Minimal Apple-Grade Feedback Page
-   Dark, calm, refined. Zero glow. Zero grid. Zero neon.
-   Bricolage Grotesque (display) + DM Sans (body)
-   ================================================================ */
+/* ============================================================
+   RELAY — Apple-Grade SaaS Feedback Page
+   System font · 8px rhythm · Zero neon · Restrained accent
+   ============================================================ */
 
-/* ── Reset ───────────────────────────────────────────────────── */
+/* ── Reset ─────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* ── Design Tokens ───────────────────────────────────────────── */
+/* ── Tokens ─────────────────────────────────────────────────── */
 :root {
-  --bg:          #0b0b0f;
-  --panel:       #15151c;
-  --panel-2:     #1c1c26;
-  --text:        #f0f0f2;
-  --muted:       #8e8e96;
-  --border:      #25252f;
-  --border-focus:#3a3a4a;
-  --accent:      #0a84ff;
-  --accent-dim:  rgba(10, 132, 255, 0.55);
-  --success:     #34c759;
-  --error:       #ff453a;
+  /* Palette — unchanged from spec */
+  --bg:         #0b0b0f;
+  --panel:      #15151c;
+  --panel-2:    #1c1c26;
+  --text:       #f5f5f7;
+  --muted:      #a1a1aa;
+  --border:     #2a2a35;
+  --accent:     #0a84ff;
+  --accent-2:   #2873ce;
 
-  --font-display: 'Bricolage Grotesque', sans-serif;
-  --font-body:    'DM Sans', sans-serif;
+  /* Derived — keep blue tightly scoped */
+  --border-focus:  rgba(10, 132, 255, 0.5);
+  --error:         #ff453a;
+  --success-green: #34c759;
 
-  --radius-input: 11px;
-  --radius-card:  16px;
-  --radius-btn:   11px;
+  /* System font — exactly as Apple uses */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+
+  /* 8px rhythm */
+  --s1:  8px;
+  --s2:  16px;
+  --s3:  24px;
+  --s4:  32px;
+  --s5:  40px;
+  --s6:  48px;
+  --s7:  56px;
+  --s8:  64px;
+
+  /* Radii */
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;
 
   /* Transitions */
-  --t-fast:   140ms ease;
-  --t-base:   220ms ease;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-fast: 120ms;
+  --t-mid:  200ms;
 }
 
-/* ── Base ────────────────────────────────────────────────────── */
+/* ── Base ───────────────────────────────────────────────────── */
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
 }
 
 body {
-  background-color: var(--bg);
+  background: var(--bg);
   color: var(--text);
-  font-family: var(--font-body);
-  font-size: 16px;
+  font-family: var(--font);
+  font-size: 15px;
   line-height: 1.6;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
-/* ── Page Layout ─────────────────────────────────────────────── */
-.page {
+/* ── Outer shell ────────────────────────────────────────────── */
+.page-outer {
   width: 100%;
-  max-width: 620px;
-  margin: 0 auto;
-  padding: 0 24px 96px;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  padding: var(--s6) var(--s3) var(--s8);
+}
 
-  /* Single clean fade-in on load */
-  animation: fadeUp 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+/* Used on success.html — true vertical center */
+.page-outer--centered {
+  align-items: center;
+  padding: var(--s4);
+}
+
+/* ── Inner content column ───────────────────────────────────── */
+.page-inner {
+  width: 100%;
+  max-width: 580px;
+  animation: fadeUp 0.4s var(--ease) both;
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Header / Logo ───────────────────────────────────────────── */
+/* ── Logo ───────────────────────────────────────────────────── */
 .site-header {
-  padding-top: 52px;
-  padding-bottom: 0;
   display: flex;
   justify-content: center;
+  margin-bottom: var(--s7);
 }
 
 .logo {
-  height: 36px;
+  height: 32px;
   width: auto;
   display: block;
-  /* Fallback if logo.png is missing */
   object-fit: contain;
 }
 
-/* ── Hero ────────────────────────────────────────────────────── */
+.logo-fallback {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: var(--text);
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
 .hero {
   text-align: center;
-  padding: 52px 0 48px;
+  margin-bottom: var(--s6);
 }
 
 .hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(34px, 6vw, 52px);
-  font-weight: 700;
-  letter-spacing: -1.5px;
-  line-height: 1.08;
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  line-height: 1.12;
   color: var(--text);
-  margin-bottom: 16px;
+  margin-bottom: var(--s2);
 }
 
-.hero-subtitle {
-  font-size: 17px;
-  font-weight: 300;
+.hero-sub {
+  font-size: 15px;
+  font-weight: 400;
   color: var(--muted);
   line-height: 1.55;
-  max-width: 400px;
+  max-width: 380px;
   margin: 0 auto;
 }
 
-/* ── Form Container ──────────────────────────────────────────── */
-.content {
-  width: 100%;
-}
-
+/* ── Form ───────────────────────────────────────────────────── */
 form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--s2);  /* 16px between field groups */
 }
 
-/* ── Individual Question Block ───────────────────────────────── */
-.field {
+/* ── Field group card ───────────────────────────────────────── */
+.field-group {
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: 24px 24px 20px;
-  transition: border-color var(--t-base);
+  border-radius: var(--r-lg);
+  padding: var(--s3);   /* 24px */
+  transition: border-color var(--t-mid) var(--ease);
 }
 
-.field:focus-within {
-  border-color: var(--border-focus);
+.field-group:focus-within {
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Error state */
-.field.is-invalid {
-  border-color: rgba(255, 69, 58, 0.4);
-  animation: shake 0.32s ease both;
+.field-group.has-err {
+  border-color: rgba(255, 69, 58, 0.35);
+  animation: errShake 0.28s var(--ease);
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%       { transform: translateX(-4px); }
-  40%       { transform: translateX(4px); }
-  60%       { transform: translateX(-3px); }
-  80%       { transform: translateX(3px); }
+@keyframes errShake {
+  0%,100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
 }
 
-/* ── Label ───────────────────────────────────────────────────── */
-.label {
+/* ── Field label ────────────────────────────────────────────── */
+.field-label {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
+  align-items: baseline;
+  gap: var(--s1);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0;
   line-height: 1.45;
-  letter-spacing: -0.1px;
-  margin-bottom: 14px;
+  margin-bottom: var(--s2);
   cursor: pointer;
 }
 
-.label-num {
-  font-family: var(--font-body);
+.q-index {
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--accent-dim);
-  background: rgba(10, 132, 255, 0.08);
-  border: 1px solid rgba(10, 132, 255, 0.14);
-  border-radius: 6px;
-  padding: 3px 6px;
-  line-height: 1.4;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: rgba(161, 161, 170, 0.45);
   flex-shrink: 0;
-  margin-top: 1px;
+  padding-top: 1px;
 }
 
-/* ── Textarea ────────────────────────────────────────────────── */
-.input {
+/* ── Textarea ───────────────────────────────────────────────── */
+.field-input {
   display: block;
   width: 100%;
   background: var(--panel-2);
   border: 1px solid var(--border);
-  border-radius: var(--radius-input);
+  border-radius: var(--r-sm);
   color: var(--text);
-  font-family: var(--font-body);
+  font-family: var(--font);
   font-size: 14px;
   font-weight: 400;
-  line-height: 1.65;
-  padding: 13px 15px;
-
-  /* Critical: no hidden overflow */
+  line-height: 1.6;
+  padding: 11px 13px;
   resize: vertical;
-  min-height: 120px;
-  overflow: auto;
-
+  min-height: 108px;
   outline: none;
   -webkit-appearance: none;
-  transition: border-color var(--t-base), background-color var(--t-fast);
+  transition:
+    border-color var(--t-mid) var(--ease),
+    background-color var(--t-fast) var(--ease);
 }
 
-.input::placeholder {
-  color: rgba(142, 142, 150, 0.4);
+.field-input::placeholder {
+  color: rgba(161, 161, 170, 0.32);
 }
 
-.input:hover {
-  background: rgba(30, 30, 42, 0.9);
-  border-color: rgba(48, 48, 62, 1);
+.field-input:focus {
+  border-color: var(--border-focus);
+  background: #1f1f2a;
 }
 
-.input:focus {
-  background: rgba(30, 30, 42, 1);
-  border-color: rgba(10, 132, 255, 0.45);
-  /* Clean border-only focus — no glow */
-}
-
-/* ── Error Message ───────────────────────────────────────────── */
-.err-msg {
+/* ── Field error ────────────────────────────────────────────── */
+.field-err {
   font-size: 12px;
   color: var(--error);
-  margin-top: 10px;
+  margin-top: var(--s1);
   min-height: 0;
   line-height: 1.4;
-  /* Hidden by default */
   display: none;
 }
-
-.err-msg.visible {
+.field-err.show {
   display: block;
 }
 
-/* ── Submit Row ──────────────────────────────────────────────── */
-.submit-row {
+/* ── Rating / Segmented Control ─────────────────────────────── */
+.rating-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  padding-top: 8px;
+  gap: var(--s1);
 }
 
-/* ── Submit Button ───────────────────────────────────────────── */
-.submit-btn {
-  width: 100%;
-  height: 50px;
-  background: var(--accent);
-  border: none;
-  border-radius: var(--radius-btn);
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.1px;
-  cursor: pointer;
+.rating-scale {
+  display: flex;
+  gap: 6px;
+}
 
+/* Hide native radio */
+.rating-option input[type="radio"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The visible segment */
+.rating-face {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0;
+  flex: 1;
+  height: 40px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+}
 
+.rating-option {
+  flex: 1;
+  display: flex;
+}
+
+/* Hover */
+.rating-face:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.1);
+  color: var(--text);
+}
+
+/* Checked state — pure white/neutral, no blue */
+.rating-option input[type="radio"]:checked + .rating-face {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.18);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Keyboard focus indicator */
+.rating-option input[type="radio"]:focus-visible + .rating-face {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Legend */
+.rating-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(161, 161, 170, 0.45);
+  padding: 0 2px;
+}
+
+/* ── Submit area ────────────────────────────────────────────── */
+.submit-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s2);
+  padding-top: var(--s1);
+}
+
+/* ── Primary button — ONLY place accent blue appears on form ── */
+.btn-primary {
+  width: 100%;
+  height: 48px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--r-md);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
-
   transition:
-    background-color var(--t-fast),
-    transform var(--t-fast),
-    opacity var(--t-fast);
+    background-color var(--t-fast) var(--ease),
+    transform var(--t-fast) var(--ease),
+    opacity var(--t-mid) var(--ease);
 }
 
-.submit-btn:hover:not(:disabled) {
-  background: #0073e0;
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-2);
 }
 
-.submit-btn:active:not(:disabled) {
-  transform: scale(0.988);
-  background: #0066cc;
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.99);
+  background: #0060b8;
 }
 
-.submit-btn:disabled {
-  opacity: 0.65;
+.btn-primary:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-/* Label / spinner toggle */
-.btn-label {
-  transition: opacity var(--t-fast);
+/* Spinner toggle */
+.btn-text {
+  transition: opacity var(--t-fast) var(--ease);
 }
 
-.btn-spinner {
+.btn-loader {
   position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(255,255,255,0.3);
+  width: 17px;
+  height: 17px;
+  border: 1.8px solid rgba(255,255,255,0.28);
   border-top-color: #fff;
   border-radius: 50%;
   opacity: 0;
-  transition: opacity var(--t-fast);
-  animation: spin 0.75s linear infinite;
+  animation: spin 0.65s linear infinite;
+  transition: opacity var(--t-fast) var(--ease);
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-.submit-btn.is-loading .btn-label {
-  opacity: 0;
-}
+.btn-primary.is-loading .btn-text  { opacity: 0; }
+.btn-primary.is-loading .btn-loader { opacity: 1; }
 
-.submit-btn.is-loading .btn-spinner {
-  opacity: 1;
-}
-
-/* ── Submit Caption ──────────────────────────────────────────── */
-.submit-caption {
+/* Submit caption */
+.submit-note {
   font-size: 12px;
-  color: rgba(142, 142, 150, 0.5);
+  color: rgba(161, 161, 170, 0.38);
   letter-spacing: 0.01em;
-  text-align: center;
 }
 
-/* ── Success State ───────────────────────────────────────────── */
-.success {
+/* ── Success screen ─────────────────────────────────────────── */
+.success-card {
+  width: 100%;
+  max-width: 480px;
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: var(--radius-card);
-  padding: 56px 40px 52px;
+  border-radius: var(--r-lg);
+  padding: var(--s7) var(--s5);
   text-align: center;
-
-  animation: fadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-.success[hidden] {
-  display: none;
-}
-
-.success-check {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: var(--s2);
+  animation: fadeUp 0.4s var(--ease) both;
+}
+
+.success-icon {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(52, 199, 89, 0.1);
-  border: 1px solid rgba(52, 199, 89, 0.2);
-  color: var(--success);
-  margin: 0 auto 24px;
-}
-
-.success-heading {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--text);
-  margin-bottom: 10px;
-}
-
-.success-body {
-  font-size: 15px;
-  font-weight: 300;
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-/* ── Footer ──────────────────────────────────────────────────── */
-.site-footer {
-  margin-top: 64px;
-  padding-top: 32px;
-  border-top: 1px solid rgba(37, 37, 47, 0.8);
-  text-align: center;
-}
-
-.site-footer p {
-  font-size: 13px;
-  color: rgba(142, 142, 150, 0.45);
+  background: rgba(52, 199, 89, 0.09);
+  border: 1px solid rgba(52, 199, 89, 0.18);
+  color: var(--success-green);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 4px 10px;
+  margin-bottom: var(--s1);
 }
 
-.site-footer a {
-  color: rgba(142, 142, 150, 0.45);
-  text-decoration: none;
-  transition: color var(--t-fast);
+.success-title {
+  font-size: clamp(19px, 4vw, 24px);
+  font-weight: 500;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+  color: var(--text);
 }
 
-.site-footer a:hover {
+.success-sub {
+  font-size: 14px;
   color: var(--muted);
+  line-height: 1.5;
+  margin-top: -var(--s1);
 }
 
-.sep {
-  opacity: 0.4;
+/* Back button — text-style, blue only here */
+.btn-back {
+  display: inline-block;
+  margin-top: var(--s2);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 6px 0;
+  transition: opacity var(--t-fast) var(--ease);
 }
 
-/* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 560px) {
-  .page {
-    padding: 0 16px 72px;
+.btn-back:hover {
+  opacity: 0.7;
+}
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.site-footer {
+  margin-top: var(--s8);
+  padding-top: var(--s4);
+  border-top: 1px solid rgba(42, 42, 53, 0.55);
+  text-align: center;
+  font-size: 12px;
+  color: rgba(161, 161, 170, 0.35);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .page-outer {
+    padding: var(--s4) var(--s2) var(--s7);
   }
 
   .site-header {
-    padding-top: 36px;
+    margin-bottom: var(--s5);
   }
 
   .hero {
-    padding: 40px 0 36px;
+    margin-bottom: var(--s5);
   }
 
   .hero-title {
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
   }
 
-  .hero-subtitle {
+  .field-group {
+    padding: var(--s2);  /* 16px on mobile */
+  }
+
+  .rating-face {
+    height: 44px;  /* Bigger tap target on mobile */
     font-size: 15px;
   }
 
-  .field {
-    padding: 20px 18px 18px;
-  }
-
-  .success {
-    padding: 40px 24px 36px;
+  .success-card {
+    padding: var(--s5) var(--s3);
   }
 }
 
-/* ── Focus visible (keyboard nav) ────────────────────────────── */
+/* ── Focus visible ──────────────────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline-offset: 2px;
   border-radius: 4px;
 }
 
-.input:focus-visible {
-  outline: none;
+.field-input:focus-visible {
+  outline: none;  /* handled by border-color */
 }
 
-.submit-btn:focus-visible {
+.btn-primary:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
-/* ── Reduced motion ──────────────────────────────────────────── */
+/* ── Reduced motion ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
