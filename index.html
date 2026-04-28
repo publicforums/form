@@ -1,133 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relay Startup Validation Survey</title>
-    <style>
-        :root {
-            --primary-color: #007AFF;
-            --secondary-color: #E5E5EA;
-            --background-color: #FFFFFF;
-            --text-color: #000000;
-            --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
-        body {
-            font-family: var(--font-family);
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            transition: background-color 0.3s;
-        }
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2rem;
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            width: 90%;
-            max-width: 400px;
-        }
-        textarea {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid var(--primary-color);
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-        button {
-            padding: 10px;
-            border: none;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: darken(var(--primary-color), 10%);
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relay — Help Shape the Future</title>
+  <meta name="description" content="Your feedback builds the next generation chat experience." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <img src="logo.png" alt="Logo" style="width: 100px; margin-bottom: 20px;">
-    <h1>Relay Startup Validation Survey</h1>
-    <form id="survey-form">
-        <textarea id="question1" placeholder="Question 1: What is your main concern with Relay?" required></textarea>
-        <textarea id="question2" placeholder="Question 2: How likely are you to use Relay?" required></textarea>
-        <textarea id="question3" placeholder="Question 3: Any additional comments?" required></textarea>
-        <button type="submit">Submit</button>
-    </form>
-    <div class="modal" id="response-modal">
-        <div class="modal-content">
-            <h2>Your Responses</h2>
-            <p id="responses"></p>
-            <button onclick="toggleModal()">Close</button>
+  <!-- Ambient Background -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+    <div class="noise"></div>
+    <div class="grid-lines"></div>
+  </div>
+
+  <!-- Main Wrapper -->
+  <main class="main-wrapper">
+
+    <!-- Header / Logo -->
+    <header class="site-header" role="banner">
+      <div class="logo-lockup">
+        <div class="logo-mark" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="9" fill="#0a84ff" fill-opacity="0.12"/>
+            <rect x="0.5" y="0.5" width="31" height="31" rx="8.5" stroke="#0a84ff" stroke-opacity="0.3"/>
+            <!-- Relay relay-race baton / signal icon -->
+            <path d="M8 16 L14 10 L20 16 L26 10" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 22 L14 16 L20 22 L26 16" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.5"/>
+          </svg>
         </div>
-    </div>
-    <script>
-        const form = document.getElementById('survey-form');
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const responses = {
-                question1: document.getElementById('question1').value,
-                question2: document.getElementById('question2').value,
-                question3: document.getElementById('question3').value
-            };
-            localStorage.setItem('surveyResponses', JSON.stringify(responses));
-            alert('Responses saved!');
-            form.reset();
-        });
+        <span class="logo-wordmark">Relay</span>
+        <span class="logo-badge">Early Access</span>
+      </div>
+    </header>
 
-        document.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && event.shiftKey && event.key === 'L') {
-                toggleModal();
-            }
-        });
+    <!-- Hero Section -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot" aria-hidden="true"></span>
+        <span>Beta Research · 2025</span>
+      </div>
+      <h1 class="hero-title" id="hero-title">
+        Help shape<br /><em>Relay</em>
+      </h1>
+      <p class="hero-subtitle">
+        Your feedback builds the next generation<br class="br-desktop" /> chat experience.
+      </p>
+      <div class="hero-stats" aria-label="Community stats">
+        <div class="stat">
+          <span class="stat-num">2.4k</span>
+          <span class="stat-label">Responses so far</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num">~3 min</span>
+          <span class="stat-label">To complete</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Anonymous</span>
+        </div>
+      </div>
+    </section>
 
-        function toggleModal() {
-            const modal = document.getElementById('response-modal');
-            const responsesDisplay = document.getElementById('responses');
-            if (modal.style.display === 'none' || modal.style.display === '') {
-                const savedResponses = JSON.parse(localStorage.getItem('surveyResponses')) || {};
-                responsesDisplay.innerHTML = `<strong>Question 1:</strong> ${savedResponses.question1 || 'No response'}<br/>` +
-                                           `<strong>Question 2:</strong> ${savedResponses.question2 || 'No response'}<br/>` +
-                                           `<strong>Question 3:</strong> ${savedResponses.question3 || 'No response'}<br/>`;
-                modal.style.display = 'flex';
-            } else {
-                modal.style.display = 'none';
-            }
-        }
-    </script>
+    <!-- Feedback Form -->
+    <section class="form-section" aria-label="Feedback survey">
+      <form
+        id="relay-form"
+        action="https://formspree.io/f/xaqagppb"
+        method="POST"
+        novalidate
+        aria-live="polite"
+      >
+        <!-- Hidden Fields -->
+        <input type="hidden" name="_subject" value="Relay Feedback Submission" />
+        <input type="hidden" name="_format" value="plain" />
+
+        <!-- Q1 -->
+        <div class="form-card" data-index="1">
+          <div class="card-header">
+            <span class="card-number" aria-hidden="true">01</span>
+            <label class="card-label" for="q1_problem">
+              What problems do you have with your current messaging or chatting apps?
+            </label>
+          </div>
+          <div class="textarea-wrapper">
+            <textarea
+              id="q1_problem"
+              name="q1_problem"
+              placeholder="e.g. too cluttered, notifications are overwhelming, poor search, missing features..."
+              rows="4"
+              required
+              aria-required="true"
+              aria-describedby="q1-hint"
+            ></textarea>
+            <div class="textarea-glow" aria-hidden="true"></div>
+            <div class="char-hint" id="q1-hint" aria-live="polite"></div>
+          </div>
+          <div class="field-error" aria-live="assertive" role="alert"></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="form-card" data-index="2">
+          <div class="card-header">
+            <span class="card-number" aria-hidden="true">02</span>
+            <label class="card-label" for="q2_features">
+              What features or experiences would make a new chat app worth trying for you?
+            </label>
+          </div>
+          <div class="textarea-wrapper">
+            <textarea
+              id="q2_features"
+              name="q2_features"
+              placeholder="e.g. smarter notifications, better threading, AI summaries, seamless file sharing..."
+              rows="4"
+              required
+              aria-required="true"
+              aria-describedby="q2-hint"
+            ></textarea>
+            <div class="textarea-glow" aria-hidden="true"></div>
+            <div class="char-hint" id="q2-hint" aria-live="polite"></div>
+          </div>
+          <div class="field-error" aria-live="assertive" role="alert"></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="form-card" data-index="3">
+          <div class="card-header">
+            <span class="card-number" aria-hidden="true">03</span>
+            <label class="card-label" for="q3_switch">
+              How important is it for you to switch to a new chat app, and what would trigger that decision?
+            </label>
+          </div>
+          <div class="textarea-wrapper">
+            <textarea
+              id="q3_switch"
+              name="q3_switch"
+              placeholder="e.g. a feature my team can't live without, a pricing change, a privacy breach..."
+              rows="4"
+              required
+              aria-required="true"
+              aria-describedby="q3-hint"
+            ></textarea>
+            <div class="textarea-glow" aria-hidden="true"></div>
+            <div class="char-hint" id="q3-hint" aria-live="polite"></div>
+          </div>
+          <div class="field-error" aria-live="assertive" role="alert"></div>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-wrap">
+          <button
+            type="submit"
+            id="submit-btn"
+            class="submit-btn"
+            aria-live="polite"
+          >
+            <span class="btn-label">Send Feedback</span>
+            <span class="btn-icon" aria-hidden="true">
+              <!-- Arrow right -->
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="btn-spinner" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2" stroke-dasharray="35" stroke-dashoffset="35" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </button>
+          <p class="submit-note" aria-hidden="true">No account required · Responses are anonymous</p>
+        </div>
+      </form>
+
+      <!-- Success State -->
+      <div class="success-panel" id="success-panel" aria-live="assertive" role="status" hidden>
+        <div class="success-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <circle class="success-ring" cx="20" cy="20" r="18" stroke="#0a84ff" stroke-width="1.5" stroke-dasharray="113" stroke-dashoffset="113"/>
+            <path class="success-check" d="M12 20L18 26L28 14" stroke="#0a84ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="28" stroke-dashoffset="28"/>
+          </svg>
+        </div>
+        <h2 class="success-title">Thanks — you're helping shape Relay</h2>
+        <p class="success-body">Your feedback has been received. We read every response carefully as we build something worth switching to.</p>
+        <div class="success-meta">
+          <span class="success-dot" aria-hidden="true"></span>
+          Submission recorded
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer" role="contentinfo">
+      <div class="footer-inner">
+        <span class="footer-logo">Relay</span>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <span class="footer-copy">© 2025 Relay Technologies, Inc.</span>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <a href="#" class="footer-link">Privacy</a>
+        <span class="footer-sep" aria-hidden="true">·</span>
+        <a href="#" class="footer-link">Terms</a>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="main.js"></script>
 </body>
 </html>
