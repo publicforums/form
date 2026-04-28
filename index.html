@@ -4,35 +4,67 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Relay — Share Your Feedback</title>
-  <meta name="description" content="Your feedback builds the next generation chat experience." />
+  <meta name="description" content="Help shape the next generation chat experience." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <div class="page-outer">
-    <div class="page-inner">
+  <!-- ══════════════════════════════════════════
+       COFFEE LOADER OVERLAY
+  ══════════════════════════════════════════ -->
+  <div id="loader" class="loader" aria-hidden="true" aria-label="Submitting…">
+    <div class="loader-inner">
+      <div class="coffee-wrap">
 
-      <!-- ── Logo ─────────────────────────────────────── -->
+        <!-- Steam wisps -->
+        <div class="steam">
+          <span class="steam__wisp steam__wisp--1"></span>
+          <span class="steam__wisp steam__wisp--2"></span>
+          <span class="steam__wisp steam__wisp--3"></span>
+        </div>
+
+        <!-- Cup body -->
+        <div class="cup">
+          <div class="cup__liquid">
+            <div class="cup__foam"></div>
+          </div>
+          <div class="cup__handle"></div>
+          <div class="cup__saucer"></div>
+        </div>
+
+      </div>
+      <p class="loader-label">Sending your feedback…</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MAIN PAGE
+  ══════════════════════════════════════════ -->
+  <div class="page" id="page-form">
+
+    <div class="wrap">
+
+      <!-- Logo -->
       <header class="site-header">
         <img
           src="logo.png.PNG"
           alt="Relay"
           class="logo"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+          onerror="this.style.display='none';document.getElementById('logo-text').style.display='block';"
         />
-        <span class="logo-fallback" style="display:none;">Relay</span>
+        <span id="logo-text" class="logo-text" style="display:none;">Relay</span>
       </header>
 
-      <!-- ── Hero ─────────────────────────────────────── -->
+      <!-- Hero -->
       <section class="hero">
         <h1 class="hero-title">Help shape Relay</h1>
         <p class="hero-sub">Your feedback builds the next generation chat experience.</p>
       </section>
 
-      <!-- ── Form ─────────────────────────────────────── -->
+      <!-- Form -->
       <main>
         <form
-          id="relay-form"
+          id="feedback-form"
           action="https://formspree.io/f/xaqagppb"
           method="POST"
           novalidate
@@ -40,119 +72,165 @@
           <input type="hidden" name="_subject" value="Relay Feedback Submission" />
 
           <!-- Q1 -->
-          <div class="field-group" id="fg-q1">
+          <div class="field" id="field-q1">
             <label class="field-label" for="q1_problem">
-              <span class="q-index">1 of 4</span>
-              What problems do you have with your current messaging or chatting apps?
+              <span class="field-num">01</span>
+              What problems do you have with your current messaging apps?
             </label>
             <textarea
               id="q1_problem"
               name="q1_problem"
-              class="field-input"
-              placeholder="Too cluttered, poor search, notification overload, no threading…"
-              rows="4"
+              class="field-textarea"
+              placeholder="Too cluttered, bad search, notification overload…"
+              rows="3"
               required
             ></textarea>
-            <p class="field-err" id="err-q1" role="alert"></p>
+            <span class="field-err" id="err-q1" role="alert"></span>
           </div>
 
           <!-- Q2 -->
-          <div class="field-group" id="fg-q2">
+          <div class="field" id="field-q2">
             <label class="field-label" for="q2_features">
-              <span class="q-index">2 of 4</span>
-              What features or experiences would make a new chat app worth trying for you?
+              <span class="field-num">02</span>
+              What features would make a new chat app worth trying?
             </label>
             <textarea
               id="q2_features"
               name="q2_features"
-              class="field-input"
-              placeholder="Smarter notifications, AI summaries, better file sharing, clean design…"
-              rows="4"
+              class="field-textarea"
+              placeholder="Smarter notifications, AI summaries, clean design…"
+              rows="3"
               required
             ></textarea>
-            <p class="field-err" id="err-q2" role="alert"></p>
+            <span class="field-err" id="err-q2" role="alert"></span>
           </div>
 
           <!-- Q3 -->
-          <div class="field-group" id="fg-q3">
+          <div class="field" id="field-q3">
             <label class="field-label" for="q3_switch">
-              <span class="q-index">3 of 4</span>
-              How important is it for you to switch to a new chat app, and what would trigger that decision?
+              <span class="field-num">03</span>
+              What would trigger you to switch to a new chat app?
             </label>
             <textarea
               id="q3_switch"
               name="q3_switch"
-              class="field-input"
-              placeholder="A must-have feature, a pricing change, a privacy concern…"
-              rows="4"
+              class="field-textarea"
+              placeholder="A must-have feature, privacy breach, pricing change…"
+              rows="3"
               required
             ></textarea>
-            <p class="field-err" id="err-q3" role="alert"></p>
+            <span class="field-err" id="err-q3" role="alert"></span>
           </div>
 
-          <!-- Q4 — Interest rating -->
-          <div class="field-group" id="fg-q4">
-            <fieldset class="rating-block">
-              <legend class="field-label">
-                <span class="q-index">4 of 4</span>
-                Rate your interest in a new chat app like Relay
-              </legend>
+          <!-- Q4 — Star rating -->
+          <div class="field" id="field-q4">
+            <span class="field-label">
+              <span class="field-num">04</span>
+              Rate your interest in a new chat app like Relay
+            </span>
 
-              <div class="rating-scale" role="group" aria-label="Interest rating 1 to 5">
-                <label class="rating-option">
-                  <input type="radio" name="q4_interest" value="1" required />
-                  <span class="rating-face">1</span>
-                </label>
-                <label class="rating-option">
-                  <input type="radio" name="q4_interest" value="2" />
-                  <span class="rating-face">2</span>
-                </label>
-                <label class="rating-option">
-                  <input type="radio" name="q4_interest" value="3" />
-                  <span class="rating-face">3</span>
-                </label>
-                <label class="rating-option">
-                  <input type="radio" name="q4_interest" value="4" />
-                  <span class="rating-face">4</span>
-                </label>
-                <label class="rating-option">
-                  <input type="radio" name="q4_interest" value="5" />
-                  <span class="rating-face">5</span>
-                </label>
-              </div>
+            <div class="star-row" id="star-rating" role="group" aria-label="Interest rating 1 to 5 stars">
+              <!-- Stars rendered RTL so CSS :hover siblings work -->
+              <label class="star-label" title="5 — Extremely interested">
+                <input class="star-input" type="radio" name="q4_interest" value="5" required />
+                <span class="star-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </span>
+              </label>
+              <label class="star-label" title="4">
+                <input class="star-input" type="radio" name="q4_interest" value="4" />
+                <span class="star-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </span>
+              </label>
+              <label class="star-label" title="3">
+                <input class="star-input" type="radio" name="q4_interest" value="3" />
+                <span class="star-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </span>
+              </label>
+              <label class="star-label" title="2">
+                <input class="star-input" type="radio" name="q4_interest" value="2" />
+                <span class="star-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </span>
+              </label>
+              <label class="star-label" title="1 — Not interested">
+                <input class="star-input" type="radio" name="q4_interest" value="1" />
+                <span class="star-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </span>
+              </label>
+            </div>
 
-              <div class="rating-legend">
-                <span>Not interested</span>
-                <span>Extremely interested</span>
-              </div>
-            </fieldset>
-            <p class="field-err" id="err-q4" role="alert"></p>
+            <div class="star-labels-row" aria-hidden="true">
+              <span>Not interested</span>
+              <span>Extremely interested</span>
+            </div>
+
+            <span class="field-err" id="err-q4" role="alert"></span>
           </div>
 
           <!-- Submit -->
           <div class="submit-area">
-            <button type="submit" id="submit-btn" class="btn-primary" aria-live="polite">
-              <span class="btn-text">Send Feedback</span>
-              <span class="btn-loader" aria-hidden="true"></span>
+            <button type="submit" id="submit-btn" class="btn-submit">
+              <span class="btn-submit__text">Send Feedback</span>
             </button>
-            <p class="submit-note">Anonymous &middot; About 3 minutes</p>
+            <p class="submit-caption">Anonymous · About 3 minutes</p>
           </div>
 
         </form>
       </main>
 
-      <!-- ── Footer ────────────────────────────────────── -->
       <footer class="site-footer">
-        <span>&copy; 2025 Relay Technologies, Inc.</span>
-        <span class="dot">&middot;</span>
+        <span>© 2025 Relay Technologies, Inc.</span>
+        <span class="sep">·</span>
         <a href="#">Privacy</a>
-        <span class="dot">&middot;</span>
+        <span class="sep">·</span>
         <a href="#">Terms</a>
       </footer>
 
-    </div><!-- /.page-inner -->
-  </div><!-- /.page-outer -->
+    </div><!-- /.wrap -->
+  </div><!-- /#page-form -->
 
-  <script src="main.js"></script>
+  <!-- ══════════════════════════════════════════
+       SUCCESS SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="page page--success" id="page-success" aria-hidden="true">
+    <div class="wrap wrap--center">
+
+      <header class="site-header">
+        <img
+          src="logo.png.PNG"
+          alt="Relay"
+          class="logo"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+        />
+        <span class="logo-text" style="display:none;">Relay</span>
+      </header>
+
+      <div class="success-card">
+        <div class="success-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12.5L10 17.5L19 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2 class="success-title">Thanks — your feedback<br>helps shape Relay</h2>
+        <p class="success-sub">We've received your response and appreciate your time.</p>
+        <button class="btn-back" id="btn-back" onclick="resetPage()">← Back</button>
+      </div>
+
+      <footer class="site-footer">
+        <span>© 2025 Relay Technologies, Inc.</span>
+        <span class="sep">·</span>
+        <a href="#">Privacy</a>
+        <span class="sep">·</span>
+        <a href="#">Terms</a>
+      </footer>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
