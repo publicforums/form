@@ -9,151 +9,149 @@
 </head>
 <body>
 
-  <div class="shell">
+  <div class="page-outer">
+    <div class="page-inner">
 
-    <!-- ── Header ──────────────────────────────────────── -->
-    <header class="header">
-      <img
-        src="logo.png.PNG"
-        alt="Relay"
-        class="logo"
-        onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='block';"
-      />
-      <span class="logo-fallback" style="display:none; font-weight:600; font-size:18px; letter-spacing:-0.3px;">Relay</span>
-    </header>
+      <!-- ── Logo ─────────────────────────────────────── -->
+      <header class="site-header">
+        <img
+          src="logo.png.PNG"
+          alt="Relay"
+          class="logo"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+        />
+        <span class="logo-fallback" style="display:none;">Relay</span>
+      </header>
 
-    <!-- ── Hero ────────────────────────────────────────── -->
-    <section class="hero">
-      <h1 class="hero-title">Help shape Relay</h1>
-      <p class="hero-sub">Your feedback builds the next generation chat experience.</p>
-    </section>
+      <!-- ── Hero ─────────────────────────────────────── -->
+      <section class="hero">
+        <h1 class="hero-title">Help shape Relay</h1>
+        <p class="hero-sub">Your feedback builds the next generation chat experience.</p>
+      </section>
 
-    <!-- ── Form ────────────────────────────────────────── -->
-    <main class="main">
-      <form
-        id="relay-form"
-        action="https://formspree.io/f/xaqagppb"
-        method="POST"
-        novalidate
-      >
-        <input type="hidden" name="_subject" value="Relay Feedback Submission" />
+      <!-- ── Form ─────────────────────────────────────── -->
+      <main>
+        <form
+          id="relay-form"
+          action="https://formspree.io/f/xaqagppb"
+          method="POST"
+          novalidate
+        >
+          <input type="hidden" name="_subject" value="Relay Feedback Submission" />
 
-        <!-- Q1 -->
-        <div class="field" id="f-q1">
-          <label class="field-label" for="q1_problem">
-            <span class="field-index">1 of 4</span>
-            What problems do you have with your current messaging or chatting apps?
-          </label>
-          <textarea
-            id="q1_problem"
-            name="q1_problem"
-            class="textarea"
-            placeholder="Too cluttered, poor search, notification overload, no threading…"
-            rows="4"
-            required
-          ></textarea>
-          <p class="field-err" id="err-q1" role="alert"></p>
-        </div>
+          <!-- Q1 -->
+          <div class="field-group" id="fg-q1">
+            <label class="field-label" for="q1_problem">
+              <span class="q-index">1 of 4</span>
+              What problems do you have with your current messaging or chatting apps?
+            </label>
+            <textarea
+              id="q1_problem"
+              name="q1_problem"
+              class="field-input"
+              placeholder="Too cluttered, poor search, notification overload, no threading…"
+              rows="4"
+              required
+            ></textarea>
+            <p class="field-err" id="err-q1" role="alert"></p>
+          </div>
 
-        <!-- Q2 -->
-        <div class="field" id="f-q2">
-          <label class="field-label" for="q2_features">
-            <span class="field-index">2 of 4</span>
-            What features or experiences would make a new chat app worth trying for you?
-          </label>
-          <textarea
-            id="q2_features"
-            name="q2_features"
-            class="textarea"
-            placeholder="Smarter notifications, AI summaries, better file sharing, clean design…"
-            rows="4"
-            required
-          ></textarea>
-          <p class="field-err" id="err-q2" role="alert"></p>
-        </div>
+          <!-- Q2 -->
+          <div class="field-group" id="fg-q2">
+            <label class="field-label" for="q2_features">
+              <span class="q-index">2 of 4</span>
+              What features or experiences would make a new chat app worth trying for you?
+            </label>
+            <textarea
+              id="q2_features"
+              name="q2_features"
+              class="field-input"
+              placeholder="Smarter notifications, AI summaries, better file sharing, clean design…"
+              rows="4"
+              required
+            ></textarea>
+            <p class="field-err" id="err-q2" role="alert"></p>
+          </div>
 
-        <!-- Q3 -->
-        <div class="field" id="f-q3">
-          <label class="field-label" for="q3_switch">
-            <span class="field-index">3 of 4</span>
-            How important is it for you to switch to a new chat app, and what would trigger that decision?
-          </label>
-          <textarea
-            id="q3_switch"
-            name="q3_switch"
-            class="textarea"
-            placeholder="A must-have feature, a pricing change, a privacy concern…"
-            rows="4"
-            required
-          ></textarea>
-          <p class="field-err" id="err-q3" role="alert"></p>
-        </div>
+          <!-- Q3 -->
+          <div class="field-group" id="fg-q3">
+            <label class="field-label" for="q3_switch">
+              <span class="q-index">3 of 4</span>
+              How important is it for you to switch to a new chat app, and what would trigger that decision?
+            </label>
+            <textarea
+              id="q3_switch"
+              name="q3_switch"
+              class="field-input"
+              placeholder="A must-have feature, a pricing change, a privacy concern…"
+              rows="4"
+              required
+            ></textarea>
+            <p class="field-err" id="err-q3" role="alert"></p>
+          </div>
 
-        <!-- Q4 — Interest rating -->
-        <div class="field" id="f-q4">
-          <fieldset class="rating-fieldset">
-            <legend class="field-label">
-              <span class="field-index">4 of 4</span>
-              Rate your interest in a new chat app like Relay
-            </legend>
+          <!-- Q4 — Interest rating -->
+          <div class="field-group" id="fg-q4">
+            <fieldset class="rating-block">
+              <legend class="field-label">
+                <span class="q-index">4 of 4</span>
+                Rate your interest in a new chat app like Relay
+              </legend>
 
-            <div class="rating-scale">
-
-              <div class="rating-labels">
-                <span class="rating-label-text">Not interested</span>
-                <span class="rating-label-text">Extremely interested</span>
-              </div>
-
-              <div class="rating-track" role="group" aria-label="Interest rating 1 to 5">
+              <div class="rating-scale" role="group" aria-label="Interest rating 1 to 5">
                 <label class="rating-option">
                   <input type="radio" name="q4_interest" value="1" required />
-                  <span class="rating-btn">1</span>
+                  <span class="rating-face">1</span>
                 </label>
                 <label class="rating-option">
                   <input type="radio" name="q4_interest" value="2" />
-                  <span class="rating-btn">2</span>
+                  <span class="rating-face">2</span>
                 </label>
                 <label class="rating-option">
                   <input type="radio" name="q4_interest" value="3" />
-                  <span class="rating-btn">3</span>
+                  <span class="rating-face">3</span>
                 </label>
                 <label class="rating-option">
                   <input type="radio" name="q4_interest" value="4" />
-                  <span class="rating-btn">4</span>
+                  <span class="rating-face">4</span>
                 </label>
                 <label class="rating-option">
                   <input type="radio" name="q4_interest" value="5" />
-                  <span class="rating-btn">5</span>
+                  <span class="rating-face">5</span>
                 </label>
               </div>
 
-            </div>
-          </fieldset>
-          <p class="field-err" id="err-q4" role="alert"></p>
-        </div>
+              <div class="rating-legend">
+                <span>Not interested</span>
+                <span>Extremely interested</span>
+              </div>
+            </fieldset>
+            <p class="field-err" id="err-q4" role="alert"></p>
+          </div>
 
-        <!-- Submit -->
-        <div class="submit-row">
-          <button type="submit" id="submit-btn" class="submit-btn">
-            <span class="btn-text">Send Feedback</span>
-            <span class="btn-spinner" aria-hidden="true"></span>
-          </button>
-          <p class="submit-note">Anonymous &middot; About 3 minutes</p>
-        </div>
+          <!-- Submit -->
+          <div class="submit-area">
+            <button type="submit" id="submit-btn" class="btn-primary" aria-live="polite">
+              <span class="btn-text">Send Feedback</span>
+              <span class="btn-loader" aria-hidden="true"></span>
+            </button>
+            <p class="submit-note">Anonymous &middot; About 3 minutes</p>
+          </div>
 
-      </form>
-    </main>
+        </form>
+      </main>
 
-    <!-- ── Footer ──────────────────────────────────────── -->
-    <footer class="footer">
-      <span>&copy; 2025 Relay Technologies, Inc.</span>
-      <span class="dot">&middot;</span>
-      <a href="#">Privacy</a>
-      <span class="dot">&middot;</span>
-      <a href="#">Terms</a>
-    </footer>
+      <!-- ── Footer ────────────────────────────────────── -->
+      <footer class="site-footer">
+        <span>&copy; 2025 Relay Technologies, Inc.</span>
+        <span class="dot">&middot;</span>
+        <a href="#">Privacy</a>
+        <span class="dot">&middot;</span>
+        <a href="#">Terms</a>
+      </footer>
 
-  </div><!-- /.shell -->
+    </div><!-- /.page-inner -->
+  </div><!-- /.page-outer -->
 
   <script src="main.js"></script>
 </body>

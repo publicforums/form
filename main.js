@@ -9,7 +9,7 @@
   const form      = document.getElementById('relay-form');
   const submitBtn = document.getElementById('submit-btn');
 
-  if (!form) return;
+  if (!form || !submitBtn) return;
 
   /* ── Config ───────────────────────────────────────────────── */
   const FORMSPREE = 'https://formspree.io/f/xaqagppb';
@@ -21,7 +21,7 @@
     { id: 'q3_switch',   errId: 'err-q3', groupId: 'fg-q3' },
   ];
 
-  const RATING_GROUP = { name: 'q4_interest', errId: 'err-q4', groupId: 'fg-q4' };
+  const RATING = { name: 'q4_interest', errId: 'err-q4', groupId: 'fg-q4' };
 
   let busy = false;
 
@@ -44,11 +44,8 @@
     });
   });
 
-  // Clear rating error on any selection
-  form.querySelectorAll(`input[name="${RATING_GROUP.name}"]`).forEach(radio => {
-    radio.addEventListener('change', () => {
-      clearErr(RATING_GROUP.groupId, RATING_GROUP.errId);
-    });
+  form.querySelectorAll(`input[name="${RATING.name}"]`).forEach(radio => {
+    radio.addEventListener('change', () => clearErr(RATING.groupId, RATING.errId));
   });
 
   /* ── Validation ───────────────────────────────────────────── */
@@ -66,15 +63,12 @@
       }
     });
 
-    // Rating
-    const chosen = form.querySelector(`input[name="${RATING_GROUP.name}"]:checked`);
-    clearErr(RATING_GROUP.groupId, RATING_GROUP.errId);
+    const chosen = form.querySelector(`input[name="${RATING.name}"]:checked`);
+    clearErr(RATING.groupId, RATING.errId);
     if (!chosen) {
-      showErr(RATING_GROUP.groupId, RATING_GROUP.errId, 'Please select a rating.');
+      showErr(RATING.groupId, RATING.errId, 'Please select a rating.');
       ok = false;
-      if (!first) {
-        first = form.querySelector(`input[name="${RATING_GROUP.name}"]`);
-      }
+      if (!first) first = form.querySelector(`input[name="${RATING.name}"]`);
     }
 
     if (first) {
@@ -119,13 +113,12 @@
 
     try {
       const res = await fetch(FORMSPREE, {
-        method: 'POST',
-        body: new FormData(form),
+        method:  'POST',
+        body:    new FormData(form),
         headers: { Accept: 'application/json' },
       });
 
       if (res.ok) {
-        // Redirect to separate success screen
         window.location.href = SUCCESS;
       } else {
         const data = await res.json().catch(() => ({}));
@@ -139,7 +132,7 @@
     }
   });
 
-  /* ── Inline global error (below button) ──────────────────── */
+  /* ── Global error (below button) ─────────────────────────── */
   function showGlobalError(msg) {
     document.querySelector('.global-err')?.remove();
 
@@ -156,7 +149,7 @@
     });
 
     submitBtn.insertAdjacentElement('afterend', p);
-    requestAnimationFrame(() => requestAnimationFrame(() => p.style.opacity = '1'));
+    requestAnimationFrame(() => requestAnimationFrame(() => (p.style.opacity = '1')));
 
     setTimeout(() => {
       p.style.opacity = '0';
